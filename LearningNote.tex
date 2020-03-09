@@ -1,0 +1,63 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+%\usepackage[UTF8, heading = false, scheme = plain]{ctex}
+\usepackage{palatino}
+\usepackage{url}
+\usepackage{subfigure}
+\usepackage{pifont}
+\usepackage{geometry}
+\usepackage{lipsum}%%
+\usepackage{algorithm}%%  
+\usepackage{algorithmic}  
+\usepackage{array} %
+\usepackage{algorithm}  %
+\usepackage{algorithmic}   
+ \usepackage{booktabs}  
+\usepackage{multirow}
+\usepackage{titlesec}   %设置页眉页脚的宏包
+\usepackage{changepage}
+\usepackage{tabularx, booktabs}
+\usepackage{listings}
+\usepackage{xcolor} 
+\usepackage{blindtext}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+\title{Linear Model}
+\author{Fu Lingyue}
+\date{\today}
+ 
+\begin{document} 
+
+\newpagestyle{main}{               
+     \sethead{Machine Learning}{\thepage}{\today}     %设置页眉    
+    % \setfoot{}{\thepage}{}      %设置页脚，可以在页脚添加 
+    % \thepage                      %显示页数    
+    \headrule                % 添加页眉的下划线  
+    \footrule    %添加页脚的下划线
+}
+
+\pagestyle{main}    %使用该style 
+
+
+\begin{center}
+    \Huge
+    \textbf{CS420 Machine Learning}
+     
+\end{center}
+
+\begin{center}
+    \par March 2020
+    \par Author: Fu Lingyue  \\Mail: fulingyue@sjtu.edu.cn
+\end{center}
+
+\tableofcontents
+\newpage
+\input{Background.tex}
+
+\input{LinearModel.tex}
+    
+\end{document}
