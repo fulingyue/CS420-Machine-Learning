@@ -1,38 +1,65 @@
 \documentclass[12pt,a4paper]{article}
 
-\usepackage[utf8]{inputenc}
-%\usepackage[UTF8, heading = false, scheme = plain]{ctex}
-\usepackage{palatino}
-\usepackage{url}
-\usepackage{subfigure}
-\usepackage{pifont}
-\usepackage{geometry}
-\usepackage{lipsum}%%
-\usepackage{algorithm}%%  
-\usepackage{algorithmic}  
-\usepackage{array} %
-\usepackage{algorithm}  %
-\usepackage{algorithmic}   
- \usepackage{booktabs}  
-\usepackage{multirow}
-\usepackage{titlesec}   %设置页眉页脚的宏包
-\usepackage{changepage}
-\usepackage{tabularx, booktabs}
-\usepackage{listings}
-\usepackage{xcolor} 
-\usepackage{blindtext}
-\usepackage{natbib}
-\usepackage{graphicx}
-\usepackage{amsfonts}
+% This is a template for lecture notes.
+
+\usepackage{amssymb}
+\usepackage[UTF8]{ctex}
 \usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{bm}
+\usepackage{cite}
+\usepackage{CJK}
+\usepackage[many]{tcolorbox}
+%\tcbuselibrary{listingsutf8}
+%\tcbuselibrary{skins, breakable, theorems, most}
+\geometry{a4paper,bottom = 3cm,left = 3cm, right = 3cm}
+\CTEXoptions[today=old]
+%for reference
+\usepackage{hyperref}
+\usepackage[capitalise]{cleveref}
+\crefname{enumi}{}{}
+\usepackage{titlesec}   %设置页眉页脚的宏包
+
+\usepackage{
+    color,
+    clrscode,
+    amssymb,
+    amsmath,
+    listings,
+    xcolor,
+    multirow,
+    mathtools,
+    mathrsfs,
+    amsthm,
+    systeme,
+    amsfonts,
+    chngcntr,
+    subcaption,
+    adjustbox,
+    tikz-cd
+}
+
+\newtheoremstyle{mythm}{1.5ex plus 1ex minus .2ex}{1.5ex plus 1ex minus .2ex} 
+    {}{\parindent}{\bfseries}{}{1em}{} 
+\theoremstyle{mythm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem*{remark}{Remark}
+
 
 \title{Linear Model}
 \author{Fu Lingyue}
 \date{\today}
  
+ 
 \begin{document} 
-
-\newpagestyle{main}{               
+\newpagestyle
+{main}{               
      \sethead{Machine Learning}{\thepage}{\today}     %设置页眉    
     % \setfoot{}{\thepage}{}      %设置页脚，可以在页脚添加 
     % \thepage                      %显示页数    
@@ -56,7 +83,43 @@
 
 \tableofcontents
 \newpage
-\input{Background.tex}
+
+
+\section{Prequisitions}
+\subsection{ML's Goal}
+Machine learning has a loss function $\mathcal{L}$, 
+and we have to let it take the minimum by learning the parameters of $f_\theta$.
+$$ 
+\mathrm{min} \{\frac{1}{N} \Sigma_{i = 1}^N \mathcal{L} (y_i,f_\theta(x_i))\}
+$$
+
+是预测结果接近真实的标签，是机器学习总体的目标。
+
+\subsection{Outline of Proper Nouns}
+\paragraph{欠拟合、过拟合}
+算法无法捕捉数据基础变化趋势时，出现欠拟合；
+模型把随机误差和噪声也考虑进去时，出现过拟合。
+
+\paragraph{正则化(Regularization)} Add a parameter($\lambda \Omega(\theta)$) penalty to prevent the model from overfitting the data.
+
+L2 regularization(Ridge): $\Omega(\theta) = ||\theta||^2_2 = \Sigma_{m=1}^M\theta_m^2$.
+
+L1 regularization(Lasso): $\Omega(\theta) = ||\theta||_1 = \Sigma_{m=1}^M|\theta_m|.$
+
+\paragraph{交叉验证(Cross Validation)} The training data were randomly divided into k groups, and every time we use one group to verify our model.
+
+
+\paragraph{模型泛化性(Model Generalization)} 
+
+\paragraph{判别模型和生成模型} 判别模型关注数据中的一维（显式函数）；生成模型关注数据之间的联系（隐函数）.
+
+
+
+
+
+
+
+
 
 \input{LinearModel.tex}
     
