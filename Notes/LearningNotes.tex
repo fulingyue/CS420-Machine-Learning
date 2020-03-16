@@ -1,0 +1,208 @@
+\input{/Users/fulingyue/Desktop/ChineseRef.tex}
+\title{Linear Model}
+\author{Fu Lingyue}
+\date{\today}
+
+\begin{document}
+  \pagestyle{main}
+
+\begin{center}
+    \Huge
+    \textbf{CS420 Machine Learning}
+     
+\end{center}
+
+\begin{center}
+    \par March 2020
+    \par Author: Fu Lingyue  \\Mail: fulingyue@sjtu.edu.cn
+\end{center}
+
+\tableofcontents
+\newpage
+
+\section{Prequisitions}
+\subsection{ML's Goal}
+Machine learning has a loss function $\mathcal{L}$, 
+and we have to let it take the minimum by learning the parameters of $f_\theta$.
+$$ 
+\mathrm{min} \{\frac{1}{N} \Sigma_{i = 1}^N \mathcal{L} (y_i,f_\theta(x_i))\}
+$$
+
+是预测结果接近真实的标签，是机器学习总体的目标。
+
+\subsection{Outline of Proper Nouns}
+\paragraph{欠拟合、过拟合}
+算法无法捕捉数据基础变化趋势时，出现欠拟合；
+模型把随机误差和噪声也考虑进去时，出现过拟合。
+
+\paragraph{正则化(Regularization)} Add a parameter($\lambda \Omega(\theta)$) penalty to prevent the model from overfitting the data. Also in matrix form, it is to prevent singular matrices.
+
+L2 regularization\ref{L2}(Ridge): $\Omega(\theta) = ||\theta||^2_2 = \Sigma_{m=1}^M\theta_m^2$.
+
+L1 regularization\ref{L1}(Lasso): $\Omega(\theta) = ||\theta||_1 = \Sigma_{m=1}^M|\theta_m|.$
+
+\begin{figure}[h]
+  \begin{minipage}{0.48\linewidth}
+    \centerline{\includegraphics[width = 0.5\textwidth]{ref/L1}}
+    \label{L1}
+    \caption{L1 Reguraization}
+  \end{minipage}
+\hfill
+\begin{minipage}{0.48\linewidth}
+  \centerline{\includegraphics[width = 0.6\textwidth]{ref/L2}}
+    \label{L2}
+    \caption{L2 Reguraization}
+\end{minipage}
+\end{figure}
+
+\paragraph{交叉验证(Cross Validation)} The training data were randomly divided into k groups, and every time we use one group to verify our model.
+
+
+\paragraph{模型泛化性(Model Generalization)} 
+
+\paragraph{判别模型和生成模型} 判别模型关注数据中的一维（显式函数）；生成模型关注数据之间的联系（隐函数）.
+
+\paragraph{超参数} 模型运行前就根据经验选定的参数，它们只能够人工调整而不能通过学习得到，它们的选取会关系到模型学习的效率、结果、方向等等。
+\subsection{分类指标}
+有一类模型，我们用概率$p_\theta(y|x)$来描述它的预测值，叫\textbf{概率判别模型}。
+而预测得到的概率，我们可以设置阈值来分类，包括二分类和多分类。
+
+
+
+
+
+\section{线性判别模型(Linear Model)}
+\paragraph{线性回归(Linear Regression)}
+$$f(x) = \theta_0 + \theta_1x_1 + \theta_2x_2$$
+
+（本节以\textbf{平方误差}$\mathcal L(y_i,f_\theta(x_i)) = \frac{1}{2}(y_i-f_\theta(x_i))^2$为例）
+
+\paragraph{梯度下降方法 (Gradient Descent Algorithm)}
+众所周知，梯度的方向是函数下降最快的方向。因此我们对于目标函数关于$\theta$ 取梯度，就可以得到它在$\theta$维度下降最快的方向，然后对$\theta$进行新的赋值：
+$$\theta_\text{new} \leftarrow \theta_\text{old} - \eta\frac{\partial \mathcal L(\theta)}{\partial \theta}$$
+
+这里的$\eta$ 是一个超参数，代表了梯度下降的步长。步长过长会导致越过最优点来回震荡，步长太短会导致收敛速度较慢。
+
+\subsection{梯度更新方法}
+
+\begin{enumerate}
+  \item 批量梯度下降 :根据整个数据的梯度更新,准确但是慢；
+  \item 随机梯度下降 ：根据某个数据的梯度更新，快但不确定性多；
+  \item 小批量梯度下降：用minibatch的梯度更新，较快，较准，易并行。
+\end{enumerate}
+
+\begin{lemma}
+  凸优化目标函数具有唯一最小点。
+  \label{lemma1}
+\end{lemma}
+Lemma\ref{lemma1} 应用在机器学习中，就意味着一个凸优化目标函数可以从不同的初始化参数最终学习到相同的最优值。
+其中，(下)凸函数$f:\mathbb R^n \to \mathbb R$的定义为：$\textbf{dom }f$ 是凸集，并且
+$$f(tx_1+(1-t)x_2)\leq tf(x_1) + (1-t)f(x_2)\quad \forall x_1,x_2 \in \textbf{dom}f, 0\leq t \leq 1.$$
+
+\subsection{矩阵形式(Matrix Form)}
+因为数据集很大，所以我们读入的时候很可能是一个矩阵，因此需要考虑矩阵形式。同时，矩阵形式也能够从另一个角度解释正则化。
+
+\paragraph{训练数据矩阵}
+
+\begin{equation}
+\nonumber 
+\text{特征值 } \mathbf{X} = 
+\left[
+\begin{array}{c}
+  \mathbf{x}^1 \\
+  \mathbf{x}^2 \\
+  \dots \\
+  \mathbf{x}^n
+\end{array}
+\right]
+=
+\left[
+\begin{array}{c c c c}
+  x_1^1 & x_2^1 & \dots & x_d^1\\
+  x_1^2 & x_2^2 & \dots & x_d^2\\
+  & \dots & & \\
+  x_1^n & x_2^n & \dots & x_d^n\\
+\end{array}
+\right]
+\end{equation}
+
+参数 $\mathbf{\mu} = (\mu_1 \quad \mu_2 \dots \mu_d)^T$, 标签 $\mathbf{y} = (y_1\quad y_2 \dots y_n)^T$.
+
+\paragraph{预测结果}
+$\mathbf{\hat y = X\mu = (x^1\mu \quad x^2\mu \dots x^n\mu)}$
+
+\paragraph{目标函数(Loss Function)}
+$J\mathbf{(\mu) = \frac{1}{2}(y-\hat y)^T(y-\hat y) = \frac{1}{2}(y - X\mu)^T(y-X\mu)}$
+
+为了取到目标函数的最小值，我们需要求梯度为$0$的$\mu$值，即
+\begin{equation}
+\nonumber
+  \begin{aligned}
+    \frac{\partial J(\mathbf{\mu})}{\partial \mathbf \mu} &
+    = \frac{1}{2}\frac{\partial (\mathbf y^T\mathbf y -\mathbf \mu^T\mathbf X\mathbf y - \mathbf y\mathbf X\mathbf \mu +\mathbf \mu^T\mathbf X^T\mathbf X\mathbf \mu)}{\partial \mathbf \mu} \\
+    & = \frac{1}{2}\frac{\partial (\mathbf y^T\mathbf y -2\mathbf \mu^T\mathbf X\mathbf y+\mathbf \mu^T\mathbf X^T\mathbf X\mathbf \mu)}{\partial \mathbf \mu} \\
+    & = \frac{1}{2} \frac{\partial (-2\mathbf \mu^T\mathbf X\mathbf y+\mu^T\mathbf X^T\mathbf X\mathbf \mu)}{\partial \mathbf \mu} (\text{J 是数字})\\
+    & = -\mathbf X\mathbf y - ((\mathbf X^T\mathbf X)+(\mathbf X^T\mathbf X)^T)\mathbf \mu\\
+    & = -\mathbf X^T(\mathbf y - \mathbf X\mathbf \mu)  = 0
+  \end{aligned}
+\end{equation}
+
+这里用到了矩阵求导法则(See Appendix\ref{matrix gradient}).接着求解方程：
+$$-\mathbf X^T(\mathbf y-\mathbf X\mathbf \mu) = 0$$
+$$\mathbf{X^TX\mu} = \mathbf{X^Ty}$$
+$$\mathbf \mu =\mathbf{ (X^TX)^{-1}X^Ty}$$
+至此我们得到了最优的$\mathbf \mu =\mathbf{ (X^TX)^{-1}X^Ty}$，注意这里的$\mathbf X$和$\mathbf X^T$不一定有逆矩阵，所以不能化简消去。同时，如果$\mathbf{X^TX}$ 是奇异矩阵，那么连$\mathbf{X^TX}$ 的逆矩阵都无法计算。因此，我们引入了正则化（正则化的第二个用处）:
+$$J(\mathbf \mu) = \frac{1}{2}(\mathbf y-\mathbf X\mathbf \mu)^T(\mathbf y - \mathbf X\mathbf \mu) + \frac{\lambda}{2}||\mathbf \mu||_2^2 $$
+
+相似的可以得到梯度$\displaystyle \frac{J(\mathbf \mu)}{\mathbf \mu} = -\mathbf X^T(\mathbf y-\mathbf X\mathbf \mu) + \lambda \mathbf \mu$，
+解出最优参数$\hat{\mathbf \mu} = (\mathbf X^T\mathbf X+\lambda\mathbf I)^{-1}\mathbf X^T\mathbf y$.
+
+\subsection{泛线性模型}
+泛线性模型是指，将给的特征映射到新的域上去，再用新的矩阵作为特征数据进行学习。它只是用了一个特征矩阵$\mathbf{\Phi_{n*h}}$（或者说是特征映射函数$\phi(x):\mathbb R^d \mapsto \mathbb R^h)$，进行了$x$到$\phi(x)$的转化。
+
+类似的，我们有目标函数$J(\mathbf \theta) = \frac{1}{2}(\mathbf y-\mathbf X\mathbf \Phi\mathbf\theta)^T(\mathbf y - \mathbf X\mathbf\Phi\mathbf\theta)$,
+梯度$\displaystyle \frac{J(\mathbf \theta)}{\mathbf \theta} = -\mathbf \Phi^T(\mathbf y-\mathbf X\mathbf \theta)$
+以及最优参数$\mathbf{\hat\theta} = \mathbf{(\Phi^T\Phi)^{-1}\Phi^T y}$.
+
+当引入$L2$正则化时，需要利用线性技巧来得到最优参数和预测值（略）。这里的K也被称为核矩阵，所以也叫\textbf{核线性回归}。
+
+\subsection{逻辑回归(Logistic Regression}
+
+
+
+
+\newpage
+\appendix
+
+\section{矩阵求导法则}
+\label{matrix gradient}
+\begin{enumerate}
+  \item $\partial (XY) = (\partial X)Y + X\partial Y$;
+  \item $\partial (X^T) = (\partial X)^T;$
+  \item $\partial X^{-1} = -X^{-1}(\partial X)X^{-1}$;
+  \item $\partial X^T = (\partial X)^T$;
+  \item $\displaystyle \frac{\partial x^T b}{\partial x} = \displaystyle\frac{\partial b^T x}{\partial x} = b$;
+  \item $\displaystyle \frac{\partial a^TXb}{\partial X} = ab^T$;
+  \item $\displaystyle \frac{\partial a^TXa}{\partial X} = \frac{\partial a^TX^Ta}{\partial X} = aa^T;$
+  \item $\displaystyle \frac{\partial b^TX^TXc}{\partial X} = X(bc^T+cb^T)$;
+  \item $\displaystyle \frac{\partial x^TBx}{\partial x} = (B+B^T)x$.
+\end{enumerate}
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

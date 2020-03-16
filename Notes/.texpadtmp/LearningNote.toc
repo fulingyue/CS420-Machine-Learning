@@ -1,9 +1,0 @@
-\contentsline {section}{\numberline {1}Prequisitions}{2}{section.1}% 
-\contentsline {subsection}{\numberline {1.1}ML's Goal}{2}{subsection.1.1}% 
-\contentsline {subsection}{\numberline {1.2}Outline of Proper Nouns}{2}{subsection.1.2}% 
-\contentsline {paragraph}{欠拟合、过拟合}{2}{subsection.1.2}% 
-\contentsline {paragraph}{正则化(Regularization)}{2}{subsection.1.2}% 
-\contentsline {paragraph}{交叉验证(Cross Validation)}{2}{subsection.1.2}% 
-\contentsline {paragraph}{模型泛化性(Model Generalization)}{2}{subsection.1.2}% 
-\contentsline {paragraph}{判别模型和生成模型}{2}{subsection.1.2}% 
-\contentsline {section}{\numberline {2}Linear Model}{2}{section.2}% 

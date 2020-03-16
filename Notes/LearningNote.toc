@@ -1,5 +1,0 @@
-\contentsline {section}{\numberline {1}Prequisitions}{2}%
-\contentsline {subsection}{\numberline {1.1}ML's Goal}{2}%
-\contentsline {subsection}{\numberline {1.2}Terminologies}{2}%
-\contentsline {paragraph}{\textbf {Hyper-parameter}}{2}%
-\contentsline {section}{\numberline {2}Linear Model}{2}%
