@@ -1,4 +1,5 @@
 \input{/Users/fulingyue/Desktop/ChineseRef.tex}
+\input{/Users/fulingyue/Desktop/CodeRefDef.tex}
 \title{Linear Model}
 \author{Fu Lingyue}
 \date{\today}
@@ -8,8 +9,7 @@
 
 \begin{center}
     \Huge
-    \textbf{CS420 Machine Learning}
-     
+    \textbf{CS420 Machine Learning }
 \end{center}
 
 \begin{center}
@@ -37,9 +37,9 @@ $$
 
 \paragraph{正则化(Regularization)} Add a parameter($\lambda \Omega(\theta)$) penalty to prevent the model from overfitting the data. Also in matrix form, it is to prevent singular matrices.
 
-L2 regularization\ref{L2}(Ridge): $\Omega(\theta) = ||\theta||^2_2 = \Sigma_{m=1}^M\theta_m^2$.
+L2 regularization(Ridge): $\Omega(\theta) = ||\theta||^2_2 = \Sigma_{m=1}^M\theta_m^2$.
 
-L1 regularization\ref{L1}(Lasso): $\Omega(\theta) = ||\theta||_1 = \Sigma_{m=1}^M|\theta_m|.$
+L1 regularization(Lasso): $\Omega(\theta) = ||\theta||_1 = \Sigma_{m=1}^M|\theta_m|.$
 
 \begin{figure}[h]
   \begin{minipage}{0.48\linewidth}
@@ -66,10 +66,6 @@ L1 regularization\ref{L1}(Lasso): $\Omega(\theta) = ||\theta||_1 = \Sigma_{m=1}^
 \subsection{分类指标}
 有一类模型，我们用概率$p_\theta(y|x)$来描述它的预测值，叫\textbf{概率判别模型}。
 而预测得到的概率，我们可以设置阈值来分类，包括二分类和多分类。
-
-
-
-
 
 \section{线性判别模型(Linear Model)}
 \paragraph{线性回归(Linear Regression)}
@@ -147,7 +143,7 @@ $J\mathbf{(\mu) = \frac{1}{2}(y-\hat y)^T(y-\hat y) = \frac{1}{2}(y - X\mu)^T(y-
   \end{aligned}
 \end{equation}
 
-这里用到了矩阵求导法则(See Appendix\ref{matrix gradient}).接着求解方程：
+这里用到了矩阵求导法则(See Appendix A).接着求解方程：
 $$-\mathbf X^T(\mathbf y-\mathbf X\mathbf \mu) = 0$$
 $$\mathbf{X^TX\mu} = \mathbf{X^Ty}$$
 $$\mathbf \mu =\mathbf{ (X^TX)^{-1}X^Ty}$$
@@ -160,16 +156,85 @@ $$J(\mathbf \mu) = \frac{1}{2}(\mathbf y-\mathbf X\mathbf \mu)^T(\mathbf y - \ma
 \subsection{泛线性模型}
 泛线性模型是指，将给的特征映射到新的域上去，再用新的矩阵作为特征数据进行学习。它只是用了一个特征矩阵$\mathbf{\Phi_{n*h}}$（或者说是特征映射函数$\phi(x):\mathbb R^d \mapsto \mathbb R^h)$，进行了$x$到$\phi(x)$的转化。
 
-类似的，我们有目标函数$J(\mathbf \theta) = \frac{1}{2}(\mathbf y-\mathbf X\mathbf \Phi\mathbf\theta)^T(\mathbf y - \mathbf X\mathbf\Phi\mathbf\theta)$,
-梯度$\displaystyle \frac{J(\mathbf \theta)}{\mathbf \theta} = -\mathbf \Phi^T(\mathbf y-\mathbf X\mathbf \theta)$
-以及最优参数$\mathbf{\hat\theta} = \mathbf{(\Phi^T\Phi)^{-1}\Phi^T y}$.
+类似的，我们有目标函数$J(\mathbf \theta) = \frac{1}{2}(\mathbf y-\mathbf X\mathbf \Phi\mathbf\theta)^T(\mathbf y - \mathbf X\mathbf\Phi\mathbf\theta)$, 梯度$\displaystyle \frac{\partial J(\mathbf \theta)}{\partial \mathbf \theta} = - \mathbf \Phi^T(\mathbf y - \mathbf X\mathbf \theta)$ 以及最优参数
+以及最优参$\hat{\mathbf\theta} = \mathbf{(\Phi^T\Phi)^{-1}\Phi^T y}$.
 
-当引入$L2$正则化时，需要利用线性技巧来得到最优参数和预测值（略）。这里的K也被称为核矩阵，所以也叫\textbf{核线性回归}。
+引入$L2$正则化时，需要利用线性技巧来得到最优参数和预测值（略）。这里的K也被称为核矩阵，所以也叫\textbf{核线性回归}。
 
-\subsection{逻辑回归(Logistic Regression}
+\subsection{逻辑回归(Logistic Regression)}
+我们这里讨论的是概率判别模型，也就是用概率$p_\theta(y|x)$来描述某一类别的可能性。
+\subsubsection{二分类}
+\paragraph{概率特点} 只有$y=0$ 和$y=1$两种可能性，就有如下关系：
+$$p_\theta(y=0|x) = 1-p_\theta(y=1|x)$$
 
+而概率的大小则由一个sigmoid函数来决定，$\sigma(x) = \displaystyle\frac{1}{1+e^{-x}}$.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width = 0.5\textwidth]{ref/sigmoid}
+  
+  \label{sigmoid}
+  \caption{sigmoid函数}
+\end{figure}
 
+Sigmoid函数将一个数字映射到$(0,1)$区间里，我们把它看作是选择概率。
+$$p_\theta(y=1|x) = \sigma(\theta^Tx) = \displaystyle\frac{1}{1+e^{-\theta^Tx}}$$
+$$p_\theta(y=0|x) = 1 - \sigma(\theta^Tx) = \displaystyle\frac{e^{-\theta^Tx}}{1+e^{-\theta^Tx}}$$
 
+选择sigmoid函数的原因是它不仅能够映射到(0,1),而且它有一个很好的性质：
+
+$$\displaystyle \frac{\partial\sigma(z)}{\partial z} = \sigma(z)(1-\sigma(z))$$
+\paragraph{损失函数——交叉熵函数}
+$$H(p,q) = -\Sigma_xp(x)\log q(x)$$
+$$H(p,q) = -\int_x\log q(x)\mathrm{d}x$$  
+把二分类的概率特点代入后，得到
+$$\mathcal L(y,x,p_\theta) = - y\log p_\theta(y=1|x) - (1-y)\log (1-p_\theta(y=1|x))$$
+这就是二分类所使用的损失函数了。
+
+\paragraph{梯度} 依然使用梯度下降法，通过求损失函数对于$\theta$求偏导来得到梯度方向：
+\begin{equation}
+\nonumber
+  \begin{aligned}
+    \displaystyle\frac{\partial \mathcal L(y,x,p_\theta)}{\partial \theta} 
+    & = -y\frac{1}{\sigma(\theta^Tx)}\sigma(\theta^Tx)(1-\sigma(\theta^Tx))x - (1-y)\frac{-1}{1-\sigma(\theta^Tx)}\sigma(\theta^Tx)(1-\sigma(\theta^Tx))x \\
+    &= -y(1-\sigma(\theta^Tx))x + (1-y)\sigma(\theta^Tx) x \\
+    & = (\sigma(\theta^Tx)-y)x
+  \end{aligned}
+\end{equation}
+
+得到梯度后，更新 $\theta = \theta + \lambda \frac{\partial \mathcal L}{\partial \theta}$
+\paragraph{预测结果}
+通过选择概率更大的标签，得到新的预测结果：
+\begin{equation}
+  \nonumber
+  \hat y = 
+  \begin{cases}
+    1, & p_\theta(y=1|x)> h(=0.5) \\
+    0, & \text{otherwise}
+  \end{cases}
+\end{equation}
+\paragraph{迭代} 再用预测结果去和实际的标签比较，得到新的loss函数，再次求梯度，再次更新参数$\theta\cdots$
+
+附录B里展示了这部分的函数代码。
+
+\subsubsection{多分类}
+\paragraph{预测$y=c_j$概率}
+
+$$p_\theta(y=c_j|x) = \displaystyle \frac{e^{\theta_j^Tx}}{\Sigma_{k=1}^m e^{\theta_k^T x}} \quad \text{for} j = 1,2,\dots,m$$
+
+在这里，Sigmoid函数变化成了Softmax函数，将预测结果$\{\theta_k^Tx\}$标准化.
+\paragraph{多分类交叉熵}
+$$\mathcal L(y,x,p_\theta) = -\Sigma_k \delta(y=c_k)\log p_\theta(y=c_k|x)$$
+它的梯度为
+
+\begin{equation}
+\nonumber
+  \begin{aligned}
+    \displaystyle \frac{\partial\log p_\theta(y=c_j|x)}{\partial \theta_j} & = \frac{\partial}{\partial\theta_j}\log \frac{e^{\theta_j^Tx}}{\Sigma_{k=1}^me^{\theta_k^Tx}} \\
+    &= x - \frac{\partial}{\partial\theta_j}\log \Sigma_{k=1}^m e^{\theta^T_kx} \\
+    & = x - \frac{e^{\theta_j^Tx}}{\Sigma_{k=1}^m e^{\theta_k^T x}}x \\
+    & = (1-p_\theta(y=c_j|x))x
+  \end{aligned}
+\end{equation}
 
 \newpage
 \appendix
@@ -187,9 +252,36 @@ $$J(\mathbf \mu) = \frac{1}{2}(\mathbf y-\mathbf X\mathbf \mu)^T(\mathbf y - \ma
   \item $\displaystyle \frac{\partial b^TX^TXc}{\partial X} = X(bc^T+cb^T)$;
   \item $\displaystyle \frac{\partial x^TBx}{\partial x} = (B+B^T)x$.
 \end{enumerate}
+\section{逻辑回归代码块}
+\subsection{二分类}
+\begin{lstlisting}
+  def sigmoid(x):
+        return 1.0 / (1 + np.exp(-x))
+\end{lstlisting}
+\begin{lstlisting}
+  def l2_loss(self, X, Y, reg):
+    mul = np.matmul(X,self.W)
+    predict = sigmoid(mul)
+    error =  predict - Y
+    loss = - np.matmul(Y.T ,np.log(predict)) 
+            - np.matmul((1 - Y).T, np.log(1-predict)) 
+            + reg * np.matmul(W.T,W)/2 
+    grad = np.matmul(X.T, error) + reg * self.W
+    return loss, grad
+\end{lstlisting}
+
+\begin{lstlisting}
+  def predict(self, X, threshold=0.5):
+    mul = np.matmul(X,self.W)
+    pre = sigmoid(mul)
+    Y_pred = []
+    for i in range(X.shape[0]):
+      Y_pred.append(mul[i] > threshold)
+    return Y_pred
+\end{lstlisting}
 
 
-
+\subsection{多分类}
 
 \end{document}
 
