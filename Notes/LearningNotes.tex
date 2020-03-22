@@ -236,6 +236,68 @@ $$\mathcal L(y,x,p_\theta) = -\Sigma_k \delta(y=c_k)\log p_\theta(y=c_k|x)$$
   \end{aligned}
 \end{equation}
 
+
+\subsection{支持向量机}
+通过找到最优决策边界来分类样本的方法。
+\paragraph{最优决策边界}
+每一个点都具有一定的噪音范围，当噪音范围变大的时候，划分边界变得越来越困难，而最优决策边界就是在噪音范围最大的情况下的那一条唯一的决策边界。
+
+\begin{figure}[h]
+\centering
+  \includegraphics[width = 0.6\textwidth]{ref/border}
+  \label{border}
+  \caption{Optimal decision boundary}
+\end{figure}
+
+\subsubsection{打分函数}
+打分函数和逻辑回归中的loss function 非常相似，其描述的是一个点与决策边界的距离。假设决策边界的方程为$\theta_0 + \theta_1x_1 + \theta_2x_2 = 0$，那么打分函数$s(x) = \theta_0 + \theta_1x_1 + \theta_2x_2$。打分函数的分数越高，样本离边界越远，我们的分界就有更高的置信度。
+
+
+\subsubsection{标签预测}
+经过支持向量机的计算过程后，我们会得到一个最优边界$(\omega,b)$，其中$\omega$是特征权重向量，$b$是截距。那么预测的结果就是$\omega^TX+b$，描述了$X$和我们最终得到的最有边界的距离。如果它大于0，说明在边界的右上区域，那么我们取标签为1，反之在左下区域，标签为-1，也就是函数
+\begin{equation}
+ \nonumber
+    g(z) =
+\begin{cases}
+    +1 & z \geq 0 \\
+    -1 & \text{otherwise.}
+\end{cases}
+\end{equation}
+
+\subsubsection{最优边界的寻找}
+在每一个给定边界$(\omega,b)$，每个样本都会有其对应的打分函数。
+实际上，打分函数的值正比于该点到决策边界的垂直距离。当我们把打分函数乘上标签值，就可以去除正负的影响，得到一个完完全全正比于距离的打分函数。
+
+*这里说“正比于”的 原因是，$(\omega,b)$等比缩放时并不会影响边界的位置，所以有可能是等于有可能是正比于。
+
+我们假设$\omega$模长为1，那么$\gamma= y(\omega x+b)$就是距离了。在一个给定的训练集中，我们需要找到离边界最近的那个点，它的分数就是这个边界的得分，即$\gamma_{(\omega,b)} = \min \{\gamma_1,\gamma_2\dots \gamma_N\}$.
+
+从整体上看，我们需要选择分数最高的那一个边界$(\omega,b)$，也就是$\max \{\gamma_{(\omega,b)}\}$.
+
+因此我们得到了约束条件
+$$y(\omega x + b) \geq \hat \gamma$$
+在这个约束条件下，我们需要求
+$$\max \frac{\hat\gamma}{||\omega||}$$
+
+前面已经提到，$(\omega,b)$可以等比例缩放，所以我们可以改写一下约束条件和目标函数：
+$$y(\omega x + b) \geq 1$$
+$$\max \frac{1}{||\omega||}$$
+
+这样会更好求解一些。
+
+最后，为了可以用二次规划算法求解，我们把目标函数改写成$min \frac{1}{2}||\omega||^2$.
+
+\subsubsection{支持向量机的一些优化}
+众所周知，拉格朗日有一个函数是用来优化计算线性规划问题的。
+
+当限制条件是等式的时候，我们假设约束条件为$h_i(w) = 0$,目标函数是$\min f(w)$. 那么定义拉格朗日函数$\mathcal L(w,\beta) = f(w) + \Sigma_{i=1}^l\beta_ih_i(w)$. 拉格朗日的定理表明，求解
+$$\frac{\partial\mathcal L(w,\beta)}{\partial w} = 0,\quad \frac{\partial\mathcal L(w,\beta)}{\partial \beta} = 0$$
+就可以得到问题的解。
+
+而在不等式的情况下，引入
+
+
+
 \newpage
 \appendix
 
